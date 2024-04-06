@@ -72,21 +72,15 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.jr.ai</groupId>
             <artifactId>chatbot-api-domain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.jr.ai</groupId>
-            <artifactId>chatbot-api-application</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>
-        <finalName>chatbot-api</finalName>
+        <finalName>chatbot-ai</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
