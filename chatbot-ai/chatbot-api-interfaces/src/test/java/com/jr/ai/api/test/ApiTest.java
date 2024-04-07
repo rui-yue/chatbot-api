@@ -26,26 +26,26 @@ public class ApiTest {
 
         HttpGet get = new HttpGet("https://api.zsxq.com/v2/groups/51111145144484/topics?scope=unanswered_questions&count=20");
 
-        get.addHeader("Cookie" , "zsxq_access_token=1D3E7B1C-B96D-984B-E9E5-9A855A0944D2_69BC5D53F5E313C8; zsxqsessionid=86ef2cb97cdf27ac846f4e3711d5c8c6; abtest_env=beta");
-        get.addHeader("Content-Type" , "application/json; charset=UTF-8");
+        get.addHeader("Cookie", "zsxq_access_token=1D3E7B1C-B96D-984B-E9E5-9A855A0944D2_69BC5D53F5E313C8; zsxqsessionid=86ef2cb97cdf27ac846f4e3711d5c8c6; abtest_env=beta");
+        get.addHeader("Content-Type", "application/json; charset=UTF-8");
 
         CloseableHttpResponse response = httpClient.execute(get);
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             String res = EntityUtils.toString(response.getEntity());
             System.out.println(res);
-        }else {
+        } else {
             System.out.println(response.getStatusLine().getStatusCode());
         }
     }
 
     @Test
     public void answer() throws IOException {
-        CloseableHttpClient httpPost = HttpClientBuilder.create().build();
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
         HttpPost post = new HttpPost("https://api.zsxq.com/v2/topics/4844811428485588/answer");
 
-        post.addHeader("Cookie" , "zsxq_access_token=1D3E7B1C-B96D-984B-E9E5-9A855A0944D2_69BC5D53F5E313C8; zsxqsessionid=86ef2cb97cdf27ac846f4e3711d5c8c6; abtest_env=beta");
-        post.addHeader("Content-Type" , "application/json; charset=UTF-8");
+        post.addHeader("Cookie", "zsxq_access_token=1D3E7B1C-B96D-984B-E9E5-9A855A0944D2_69BC5D53F5E313C8; zsxqsessionid=86ef2cb97cdf27ac846f4e3711d5c8c6; abtest_env=beta");
+        post.addHeader("Content-Type", "application/json; charset=UTF-8");
 
         String paramJson = "{\n" +
                 "  \"req_data\": {\n" +
@@ -58,12 +58,43 @@ public class ApiTest {
         StringEntity stringEntity = new StringEntity(paramJson, ContentType.create("text/json", "UTF-8"));
         post.setEntity(stringEntity);
 
-        CloseableHttpResponse response = httpPost.execute(post);
+        CloseableHttpResponse response = httpClient.execute(post);
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            String res = EntityUtils.toString(response.getEntity());
+            System.out.println(res);
+        } else {
+            System.out.println(response.getStatusLine().getStatusCode());
+        }
+    }
+
+    /**
+     * 调用ChatGPT APi
+     */
+    @Test
+    public void test_chatGPT() throws IOException {
+        // 创建Http连接
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        // 创建一个Post请求
+        HttpPost post = new HttpPost("https://pro-share-aws-api.zcyai.com/");
+        post.addHeader("Content-Type", "application/json");
+        //$OPENAI_API_KEY 填写自己的ChatGPT的秘钥
+        post.addHeader("Authorization", "Bearer sk-cipdkiDJP8ugP8L848A16c1dF3C4407fBf289a57EbFd092e");
+        String paramJson = "{\n" +
+                "     \"model\": \"gpt-4.0\",\n" +
+                "     \"messages\": [{\"role\": \"user\", \"content\": \"帮我写一个Java冒泡排序\"}],\n" +
+                "     \"temperature\": 0\n" +
+                "   }";
+
+        StringEntity stringEntity = new StringEntity(paramJson, ContentType.create("text/json", "UTF-8"));
+        post.setEntity(stringEntity);
+
+        CloseableHttpResponse response = httpClient. execute(post);
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
             String res = EntityUtils.toString(response.getEntity());
             System.out.println(res);
         }else {
-            System.out.println(response.getStatusLine().getStatusCode());
+            System.out.println("Error Code is：" + response.getStatusLine().getStatusCode());
         }
     }
+
 }
